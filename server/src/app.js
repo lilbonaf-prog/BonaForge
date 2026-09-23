@@ -4,22 +4,30 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 
 const healthRoutes = require("./routes/healthRoutes");
+const authRoutes = require("./routes/authRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
-const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-// -------------------------
-// Core middleware
-// -------------------------
+// ==============================
+// CORE MIDDLEWARE
+// ==============================
 
 app.use(express.json());
 
-// Security headers
+// ==============================
+// SECURITY HEADERS
+// ==============================
+
 app.use(helmet());
 
+// ==============================
 // CORS
+// ==============================
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -27,7 +35,10 @@ app.use(
   })
 );
 
-// Rate limiting
+// ==============================
+// RATE LIMITING
+// ==============================
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
@@ -37,32 +48,45 @@ const apiLimiter = rateLimit({
 
 app.use(apiLimiter);
 
-// -------------------------
-// Routes
-// -------------------------
+// ==============================
+// ROOT ROUTE
+// ==============================
 
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "BonaForge API is running successfully",
+    message:
+      "BonaForge API is running successfully",
   });
 });
 
-// Health check
-app.use("/api/health", healthRoutes);
+// ==============================
+// API ROUTES
+// ==============================
 
-app.use("/api/auth", authRoutes);
+app.use(
+  "/api/health",
+  healthRoutes
+);
 
+app.use(
+  "/api/auth",
+  authRoutes
+);
 
+app.use(
+  "/api/dashboard",
+  dashboardRoutes
+);
 
-// -------------------------
-// Error handling
-// -------------------------
+// ==============================
+// ERROR HANDLING
+// ==============================
 
 // Must come after all valid routes
 app.use(notFound);
 
-// Must be the final middleware
+// Must always be final middleware
 app.use(errorHandler);
 
 module.exports = app;

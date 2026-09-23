@@ -5,7 +5,7 @@ import {
 
 import {
   useAuth,
-} from "./AuthContext";
+} from "./authContext";
 
 // ==============================
 // PROTECTED ROUTE
@@ -19,7 +19,8 @@ export const ProtectedRoute = ({
     isAuthLoading,
   } = useAuth();
 
-  const location = useLocation();
+  const location =
+    useLocation();
 
   if (isAuthLoading) {
     return (
@@ -41,7 +42,8 @@ export const ProtectedRoute = ({
         to="/login"
         replace
         state={{
-          from: location.pathname,
+          from:
+            location.pathname,
         }}
       />
     );
