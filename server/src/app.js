@@ -9,6 +9,7 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
+const businessRoutes = require("./routes/businessRoutes");
 
 const app = express();
 
@@ -77,6 +78,11 @@ app.use(
 app.use(
   "/api/dashboard",
   dashboardRoutes
+);
+
+app.use(
+  "/api/businesses",
+  businessRoutes
 );
 
 // ==============================

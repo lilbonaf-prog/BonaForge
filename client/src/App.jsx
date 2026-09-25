@@ -19,6 +19,9 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import DashboardPage from "./pages/DashboardPage";
 import AccountPage from "./pages/AccountPage";
+import BusinessesPage from "./pages/BusinessesPage";
+
+import BusinessDetailsPage from "./pages/BusinessDetailsPage";
 
 function App() {
   return (
@@ -114,6 +117,20 @@ function App() {
             <DashboardPage />
           }
         />
+
+        <Route
+  path="/businesses"
+  element={
+    <BusinessesPage />
+  }
+/>
+
+<Route
+  path="/businesses/:businessId"
+  element={
+    <BusinessDetailsPage />
+  }
+/>
 
         <Route
           path="/account"

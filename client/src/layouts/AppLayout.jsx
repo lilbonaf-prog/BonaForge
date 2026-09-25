@@ -49,11 +49,11 @@ const navigation = [
     icon: LayoutDashboard,
     to: "/dashboard",
   },
-  {
-    label: "Businesses",
-    icon: Building2,
-    comingSoon: true,
-  },
+ {
+  label: "Businesses",
+  icon: Building2,
+  to: "/businesses",
+},
   {
     label: "Leads",
     icon: UsersRound,

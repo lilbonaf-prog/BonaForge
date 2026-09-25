@@ -1,9 +1,28 @@
+const Business = require("../models/Business");
+
+// ==============================
+// GET DASHBOARD OVERVIEW
+// ==============================
+
 const getDashboardOverview = async (
   req,
   res,
   next
 ) => {
   try {
+    // ==============================
+    // REAL BUSINESS COUNT
+    // ==============================
+
+    const businessCount =
+      await Business.countDocuments({
+        createdBy: req.user._id,
+      });
+
+    // ==============================
+    // DASHBOARD RESPONSE
+    // ==============================
+
     res.status(200).json({
       success: true,
 
@@ -11,7 +30,11 @@ const getDashboardOverview = async (
         "Dashboard overview loaded successfully",
 
       overview: {
-        businesses: 0,
+        businesses:
+          businessCount,
+
+        // These will become real counts
+        // when their modules are built.
         leads: 0,
         activeProjects: 0,
         proposals: 0,
