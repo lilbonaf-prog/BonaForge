@@ -17,18 +17,20 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
+
 import DashboardPage from "./pages/DashboardPage";
 import AccountPage from "./pages/AccountPage";
-import BusinessesPage from "./pages/BusinessesPage";
 
+import BusinessesPage from "./pages/BusinessesPage";
 import BusinessDetailsPage from "./pages/BusinessDetailsPage";
+
+import LeadsPage from "./pages/LeadsPage";
+import LeadDetailsPage from "./pages/LeadDetailsPage";
 
 function App() {
   return (
     <Routes>
-      {/* ============================== */}
       {/* ROOT */}
-      {/* ============================== */}
 
       <Route
         path="/"
@@ -40,9 +42,7 @@ function App() {
         }
       />
 
-      {/* ============================== */}
       {/* PUBLIC AUTH ROUTES */}
-      {/* ============================== */}
 
       <Route
         element={
@@ -73,12 +73,7 @@ function App() {
         />
       </Route>
 
-      {/* ============================== */}
       {/* TOKEN AUTH ROUTES */}
-      {/* ============================== */}
-      {/* These remain accessible even */}
-      {/* when a user is authenticated. */}
-      {/* ============================== */}
 
       <Route
         element={
@@ -100,9 +95,7 @@ function App() {
         />
       </Route>
 
-      {/* ============================== */}
       {/* PROTECTED APPLICATION */}
-      {/* ============================== */}
 
       <Route
         element={
@@ -119,18 +112,32 @@ function App() {
         />
 
         <Route
-  path="/businesses"
-  element={
-    <BusinessesPage />
-  }
-/>
+          path="/businesses"
+          element={
+            <BusinessesPage />
+          }
+        />
 
-<Route
-  path="/businesses/:businessId"
-  element={
-    <BusinessDetailsPage />
-  }
-/>
+        <Route
+          path="/businesses/:businessId"
+          element={
+            <BusinessDetailsPage />
+          }
+        />
+
+        <Route
+          path="/leads"
+          element={
+            <LeadsPage />
+          }
+        />
+
+        <Route
+          path="/leads/:leadId"
+          element={
+            <LeadDetailsPage />
+          }
+        />
 
         <Route
           path="/account"
@@ -140,9 +147,7 @@ function App() {
         />
       </Route>
 
-      {/* ============================== */}
       {/* NOT FOUND */}
-      {/* ============================== */}
 
       <Route
         path="*"

@@ -1,4 +1,5 @@
 const Business = require("../models/Business");
+const Lead = require("../models/Lead");
 
 // ==============================
 // GET DASHBOARD OVERVIEW
@@ -11,43 +12,78 @@ const getDashboardOverview = async (
 ) => {
   try {
     // ==============================
-    // REAL BUSINESS COUNT
+    // REAL DATABASE COUNTS
     // ==============================
 
-    const businessCount =
-      await Business.countDocuments({
+    const [
+      businessCount,
+      leadCount,
+    ] = await Promise.all([
+      Business.countDocuments({
         createdBy: req.user._id,
-      });
+      }),
+
+      Lead.countDocuments({
+        createdBy: req.user._id,
+      }),
+    ]);
+
+    // ==============================
+    // FUTURE MODULE PLACEHOLDERS
+    // ==============================
+    //
+    // These values stay at 0 until their
+    // actual modules and database models
+    // are built.
+    //
+    // We do NOT import models that do not
+    // exist yet because that would crash
+    // the server.
+    // ==============================
+
+    const activeProjectCount = 0;
+    const proposalCount = 0;
+    const invoiceCount = 0;
+    const revenueTotal = 0;
 
     // ==============================
     // DASHBOARD RESPONSE
     // ==============================
 
-    res.status(200).json({
-      success: true,
+    return res
+      .status(200)
+      .json({
+        success: true,
 
-      message:
-        "Dashboard overview loaded successfully",
+        message:
+          "Dashboard overview loaded successfully",
 
-      overview: {
-        businesses:
-          businessCount,
+        overview: {
+          businesses:
+            businessCount,
 
-        // These will become real counts
-        // when their modules are built.
-        leads: 0,
-        activeProjects: 0,
-        proposals: 0,
-        invoices: 0,
-        revenue: 0,
-      },
+          leads:
+            leadCount,
 
-      user: {
-        id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-      },
-    });
+          activeProjects:
+            activeProjectCount,
+
+          proposals:
+            proposalCount,
+
+          invoices:
+            invoiceCount,
+
+          revenue:
+            revenueTotal,
+        },
+
+        user: {
+          id: req.user._id,
+          name: req.user.name,
+          email: req.user.email,
+        },
+      });
   } catch (error) {
     next(error);
   }
