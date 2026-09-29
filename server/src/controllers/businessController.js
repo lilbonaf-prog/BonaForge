@@ -1,4 +1,6 @@
 const Business = require("../models/Business");
+const BusinessResearch = require("../models/BusinessResearch");
+const Lead = require("../models/Lead");
 
 // ==============================
 // CREATE BUSINESS
@@ -191,12 +193,53 @@ const deleteBusiness = async (
         });
     }
 
+    // ==============================
+    // PROTECT LINKED LEADS
+    // ==============================
+
+    const linkedLead =
+      await Lead.findOne({
+        createdBy:
+          req.user._id,
+        business:
+          business._id,
+      }).select(
+        "_id name companyName"
+      );
+
+    if (linkedLead) {
+      return res
+        .status(409)
+        .json({
+          success: false,
+          message:
+            "This business cannot be deleted because it is linked to a lead. Delete or unlink the lead first.",
+          leadId:
+            linkedLead._id,
+        });
+    }
+
+    // ==============================
+    // REMOVE CHILD RESEARCH
+    // ==============================
+
+    await BusinessResearch.deleteMany({
+      createdBy:
+        req.user._id,
+      business:
+        business._id,
+    });
+
+    // ==============================
+    // DELETE BUSINESS
+    // ==============================
+
     await business.deleteOne();
 
     res.status(200).json({
       success: true,
       message:
-        "Business deleted successfully",
+        "Business and linked research deleted successfully",
     });
   } catch (error) {
     next(error);

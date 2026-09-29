@@ -62,7 +62,7 @@ const navigation = [
   {
     label: "Research",
     icon: Search,
-    comingSoon: true,
+    to: "/research",
   },
   {
     label: "Proposals",

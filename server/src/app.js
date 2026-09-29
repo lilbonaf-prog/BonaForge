@@ -6,12 +6,12 @@ const rateLimit = require("express-rate-limit");
 const healthRoutes = require("./routes/healthRoutes");
 const authRoutes = require("./routes/authRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const businessRoutes = require("./routes/businessRoutes");
+const leadRoutes = require("./routes/leadRoutes");
+const researchRoutes = require("./routes/researchRoutes");
 
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
-const businessRoutes = require("./routes/businessRoutes");
-const leadRoutes =
-  require("./routes/leadRoutes");
 
 const app = express();
 
@@ -58,8 +58,7 @@ app.use(apiLimiter);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message:
-      "BonaForge API is running successfully",
+    message: "BonaForge API is running successfully",
   });
 });
 
@@ -67,30 +66,17 @@ app.get("/", (req, res) => {
 // API ROUTES
 // ==============================
 
-app.use(
-  "/api/health",
-  healthRoutes
-);
+app.use("/api/health", healthRoutes);
 
-app.use(
-  "/api/auth",
-  authRoutes
-);
+app.use("/api/auth", authRoutes);
 
-app.use(
-  "/api/dashboard",
-  dashboardRoutes
-);
+app.use("/api/dashboard", dashboardRoutes);
 
-app.use(
-  "/api/businesses",
-  businessRoutes
-);
+app.use("/api/businesses", businessRoutes);
 
-app.use(
-  "/api/leads",
-  leadRoutes
-);
+app.use("/api/leads", leadRoutes);
+
+app.use("/api/research", researchRoutes);
 
 // ==============================
 // ERROR HANDLING

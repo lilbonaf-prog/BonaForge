@@ -27,6 +27,9 @@ import BusinessDetailsPage from "./pages/BusinessDetailsPage";
 import LeadsPage from "./pages/LeadsPage";
 import LeadDetailsPage from "./pages/LeadDetailsPage";
 
+import ResearchPage from "./pages/ResearchPage";
+import ResearchDetailsPage from "./pages/ResearchDetailsPage";
+
 function App() {
   return (
     <Routes>
@@ -136,6 +139,20 @@ function App() {
           path="/leads/:leadId"
           element={
             <LeadDetailsPage />
+          }
+        />
+
+        <Route
+          path="/research"
+          element={
+            <ResearchPage />
+          }
+        />
+
+        <Route
+          path="/research/:businessId"
+          element={
+            <ResearchDetailsPage />
           }
         />
 

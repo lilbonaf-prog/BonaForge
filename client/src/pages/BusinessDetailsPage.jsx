@@ -52,6 +52,9 @@ import {
 
 import useConvertBusinessToLead from "../features/leads/useConvertBusinessToLead";
 
+import useResearchByBusiness from "../features/research/useResearchByBusiness";
+import useStartResearch from "../features/research/useStartResearch";
+
 import EditBusinessModal from "../features/businesses/EditBusinessModal";
 
 import DeleteBusinessModal from "../features/businesses/DeleteBusinessModal";
@@ -187,6 +190,15 @@ function BusinessDetailsPage() {
   ] = useState("");
 
   // ==============================
+  // RESEARCH STATE
+  // ==============================
+
+  const [
+    researchError,
+    setResearchError,
+  ] = useState("");
+
+  // ==============================
   // BUSINESS QUERY
   // ==============================
 
@@ -198,6 +210,19 @@ function BusinessDetailsPage() {
     refetch,
     isFetching,
   } = useBusiness(
+    businessId
+  );
+
+  // ==============================
+  // RESEARCH QUERY
+  // ==============================
+
+  const {
+    data: researchData,
+    isLoading: isResearchLoading,
+    isFetching: isResearchFetching,
+    refetch: refetchResearch,
+  } = useResearchByBusiness(
     businessId
   );
 
@@ -214,8 +239,14 @@ function BusinessDetailsPage() {
   const convertBusinessMutation =
     useConvertBusinessToLead();
 
+  const startResearchMutation =
+    useStartResearch();
+
   const business =
     data?.business;
+
+  const existingResearch =
+    researchData?.research;
 
   // ==============================
   // UPDATE BUSINESS
@@ -290,6 +321,69 @@ function BusinessDetailsPage() {
           },
         }
       );
+    };
+
+  // ==============================
+  // START / OPEN RESEARCH
+  // ==============================
+
+  const handleResearchAction =
+    () => {
+      setResearchError("");
+
+      if (existingResearch?._id) {
+        navigate(
+          `/research/${businessId}`
+        );
+
+        return;
+      }
+
+      startResearchMutation.mutate(
+        businessId,
+        {
+          onSuccess: (
+            response
+          ) => {
+            const researchId =
+              response?.research?._id;
+
+            if (researchId) {
+              navigate(
+                `/research/${businessId}`
+              );
+            } else {
+              navigate(
+                "/research"
+              );
+            }
+          },
+
+          onError: (
+            mutationError
+          ) => {
+            setResearchError(
+              mutationError
+                ?.response
+                ?.data
+                ?.message ||
+                mutationError
+                  ?.message ||
+                "Unable to start research."
+            );
+          },
+        }
+      );
+    };
+
+  // ==============================
+  // REFRESH BUSINESS + RESEARCH
+  // ==============================
+
+  const handleRefresh =
+    () => {
+      refetch();
+      refetchResearch();
     };
 
   // ==============================
@@ -469,6 +563,8 @@ function BusinessDetailsPage() {
     deleteBusinessMutation
       .isPending ||
     convertBusinessMutation
+      .isPending ||
+    startResearchMutation
       .isPending;
 
   return (
@@ -492,24 +588,27 @@ function BusinessDetailsPage() {
 
           <button
             type="button"
-            onClick={() =>
-              refetch()
+            onClick={
+              handleRefresh
             }
             disabled={
-              isFetching
+              isFetching ||
+              isResearchFetching
             }
             className="inline-flex h-9 items-center gap-2 rounded-xl border border-[var(--border-primary)] bg-white/[0.02] px-3 text-xs font-medium text-[var(--text-muted)] transition hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             <RefreshCw
               size={13}
               className={
-                isFetching
+                isFetching ||
+                isResearchFetching
                   ? "animate-spin"
                   : ""
               }
             />
 
-            {isFetching
+            {isFetching ||
+            isResearchFetching
               ? "Refreshing..."
               : "Refresh"}
           </button>
@@ -601,13 +700,35 @@ function BusinessDetailsPage() {
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"
-                className="inline-flex h-10 items-center gap-2 rounded-xl border border-[var(--border-primary)] bg-white/[0.025] px-4 text-xs font-semibold text-[var(--text-secondary)] transition hover:bg-white/[0.05] hover:text-white"
+                onClick={
+                  handleResearchAction
+                }
+                disabled={
+                  busy ||
+                  isResearchLoading ||
+                  isResearchFetching
+                }
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-[var(--border-primary)] bg-white/[0.025] px-4 text-xs font-semibold text-[var(--text-secondary)] transition hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <Search
-                  size={14}
-                />
+                {existingResearch?._id ? (
+                  <FileText
+                    size={14}
+                  />
+                ) : (
+                  <Search
+                    size={14}
+                  />
+                )}
 
-                Start research
+                {isResearchLoading ||
+                isResearchFetching
+                  ? "Checking research..."
+                  : startResearchMutation
+                        .isPending
+                    ? "Starting..."
+                    : existingResearch?._id
+                      ? "Open research"
+                      : "Start research"}
               </button>
 
               {business.convertedToLead ? (
@@ -687,6 +808,19 @@ function BusinessDetailsPage() {
             </div>
           </div>
         </motion.section>
+
+        {researchError ? (
+          <div className="mt-4 flex items-start gap-3 rounded-2xl border border-rose-400/15 bg-rose-400/[0.06] px-4 py-3 text-sm leading-6 text-rose-200">
+            <CircleAlert
+              size={16}
+              className="mt-0.5 shrink-0"
+            />
+
+            <span>
+              {researchError}
+            </span>
+          </div>
+        ) : null}
 
         {/* ============================== */}
         {/* CONTENT GRID */}
