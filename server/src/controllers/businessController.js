@@ -1,5 +1,6 @@
 const Business = require("../models/Business");
 const BusinessResearch = require("../models/BusinessResearch");
+const WebsiteAudit = require("../models/WebsiteAudit");
 const Lead = require("../models/Lead");
 
 // ==============================
@@ -231,6 +232,17 @@ const deleteBusiness = async (
     });
 
     // ==============================
+    // REMOVE CHILD WEBSITE AUDITS
+    // ==============================
+
+    await WebsiteAudit.deleteMany({
+      createdBy:
+        req.user._id,
+      business:
+        business._id,
+    });
+
+    // ==============================
     // DELETE BUSINESS
     // ==============================
 
@@ -239,7 +251,7 @@ const deleteBusiness = async (
     res.status(200).json({
       success: true,
       message:
-        "Business and linked research deleted successfully",
+        "Business and linked records deleted successfully",
     });
   } catch (error) {
     next(error);

@@ -55,6 +55,9 @@ import useConvertBusinessToLead from "../features/leads/useConvertBusinessToLead
 import useResearchByBusiness from "../features/research/useResearchByBusiness";
 import useStartResearch from "../features/research/useStartResearch";
 
+import useWebsiteAuditByBusiness from "../features/websiteAudit/useWebsiteAuditByBusiness";
+import useStartWebsiteAudit from "../features/websiteAudit/useStartWebsiteAudit";
+
 import EditBusinessModal from "../features/businesses/EditBusinessModal";
 
 import DeleteBusinessModal from "../features/businesses/DeleteBusinessModal";
@@ -199,6 +202,15 @@ function BusinessDetailsPage() {
   ] = useState("");
 
   // ==============================
+  // WEBSITE AUDIT STATE
+  // ==============================
+
+  const [
+    websiteAuditError,
+    setWebsiteAuditError,
+  ] = useState("");
+
+  // ==============================
   // BUSINESS QUERY
   // ==============================
 
@@ -227,6 +239,19 @@ function BusinessDetailsPage() {
   );
 
   // ==============================
+  // WEBSITE AUDIT QUERY
+  // ==============================
+
+  const {
+    data: websiteAuditData,
+    isLoading: isWebsiteAuditLoading,
+    isFetching: isWebsiteAuditFetching,
+    refetch: refetchWebsiteAudit,
+  } = useWebsiteAuditByBusiness(
+    businessId
+  );
+
+  // ==============================
   // MUTATIONS
   // ==============================
 
@@ -242,11 +267,17 @@ function BusinessDetailsPage() {
   const startResearchMutation =
     useStartResearch();
 
+  const startWebsiteAuditMutation =
+    useStartWebsiteAudit();
+
   const business =
     data?.business;
 
   const existingResearch =
     researchData?.research;
+
+  const existingWebsiteAudit =
+    websiteAuditData?.audit;
 
   // ==============================
   // UPDATE BUSINESS
@@ -377,13 +408,48 @@ function BusinessDetailsPage() {
     };
 
   // ==============================
-  // REFRESH BUSINESS + RESEARCH
+  // START / OPEN WEBSITE AUDIT
+  // ==============================
+
+  const handleWebsiteAuditAction =
+    () => {
+      setWebsiteAuditError("");
+
+      startWebsiteAuditMutation.mutate(
+        businessId,
+        {
+          onSuccess: () => {
+            navigate(
+              `/website-audits/${businessId}`
+            );
+          },
+
+          onError: (
+            mutationError
+          ) => {
+            setWebsiteAuditError(
+              mutationError
+                ?.response
+                ?.data
+                ?.message ||
+                mutationError
+                  ?.message ||
+                "Unable to start website audit."
+            );
+          },
+        }
+      );
+    };
+
+  // ==============================
+  // REFRESH BUSINESS + WORKFLOW
   // ==============================
 
   const handleRefresh =
     () => {
       refetch();
       refetchResearch();
+      refetchWebsiteAudit();
     };
 
   // ==============================
@@ -565,6 +631,8 @@ function BusinessDetailsPage() {
     convertBusinessMutation
       .isPending ||
     startResearchMutation
+      .isPending ||
+    startWebsiteAuditMutation
       .isPending;
 
   return (
@@ -593,7 +661,8 @@ function BusinessDetailsPage() {
             }
             disabled={
               isFetching ||
-              isResearchFetching
+              isResearchFetching ||
+              isWebsiteAuditFetching
             }
             className="inline-flex h-9 items-center gap-2 rounded-xl border border-[var(--border-primary)] bg-white/[0.02] px-3 text-xs font-medium text-[var(--text-muted)] transition hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -601,14 +670,16 @@ function BusinessDetailsPage() {
               size={13}
               className={
                 isFetching ||
-                isResearchFetching
+                isResearchFetching ||
+                isWebsiteAuditFetching
                   ? "animate-spin"
                   : ""
               }
             />
 
             {isFetching ||
-            isResearchFetching
+            isResearchFetching ||
+            isWebsiteAuditFetching
               ? "Refreshing..."
               : "Refresh"}
           </button>
@@ -731,6 +802,35 @@ function BusinessDetailsPage() {
                       : "Start research"}
               </button>
 
+              <button
+                type="button"
+                onClick={
+                  handleWebsiteAuditAction
+                }
+                disabled={
+                  busy ||
+                  isWebsiteAuditLoading ||
+                  isWebsiteAuditFetching
+                }
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-cyan-400/15 bg-cyan-400/[0.06] px-4 text-xs font-semibold text-cyan-200/80 transition hover:border-cyan-300/25 hover:bg-cyan-400/[0.1] hover:text-cyan-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Globe2
+                  size={14}
+                />
+
+                {isWebsiteAuditLoading ||
+                isWebsiteAuditFetching
+                  ? "Checking audit..."
+                  : startWebsiteAuditMutation
+                        .isPending
+                    ? existingWebsiteAudit?._id
+                      ? "Opening audit..."
+                      : "Starting audit..."
+                    : existingWebsiteAudit?._id
+                      ? "Open website audit"
+                      : "Start website audit"}
+              </button>
+
               {business.convertedToLead ? (
                 <button
                   type="button"
@@ -818,6 +918,19 @@ function BusinessDetailsPage() {
 
             <span>
               {researchError}
+            </span>
+          </div>
+        ) : null}
+
+        {websiteAuditError ? (
+          <div className="mt-4 flex items-start gap-3 rounded-2xl border border-rose-400/15 bg-rose-400/[0.06] px-4 py-3 text-sm leading-6 text-rose-200">
+            <CircleAlert
+              size={16}
+              className="mt-0.5 shrink-0"
+            />
+
+            <span>
+              {websiteAuditError}
             </span>
           </div>
         ) : null}

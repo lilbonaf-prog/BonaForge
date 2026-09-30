@@ -23,7 +23,7 @@ import {
 
 import {
   useAuth,
-} from "../features/auth/AuthContext";
+} from "../features/auth/authContext";
 
 const loginSchema = z.object({
   email: z

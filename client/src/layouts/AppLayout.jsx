@@ -1,4 +1,4 @@
-import {
+﻿import {
   useState,
 } from "react";
 
@@ -19,6 +19,7 @@ import {
   ChevronRight,
   FileText,
   FolderKanban,
+  Globe2,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -63,6 +64,11 @@ const navigation = [
     label: "Research",
     icon: Search,
     to: "/research",
+  },
+  {
+    label: "Website Audit",
+    icon: Globe2,
+    to: "/website-audits",
   },
   {
     label: "Proposals",

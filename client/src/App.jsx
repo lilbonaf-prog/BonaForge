@@ -30,6 +30,9 @@ import LeadDetailsPage from "./pages/LeadDetailsPage";
 import ResearchPage from "./pages/ResearchPage";
 import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 
+import WebsiteAuditPage from "./pages/WebsiteAuditPage";
+import WebsiteAuditDetailsPage from "./pages/WebsiteAuditDetailsPage";
+
 function App() {
   return (
     <Routes>
@@ -153,6 +156,20 @@ function App() {
           path="/research/:businessId"
           element={
             <ResearchDetailsPage />
+          }
+        />
+
+        <Route
+          path="/website-audits"
+          element={
+            <WebsiteAuditPage />
+          }
+        />
+
+        <Route
+          path="/website-audits/:businessId"
+          element={
+            <WebsiteAuditDetailsPage />
           }
         />
 
