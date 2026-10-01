@@ -27,6 +27,7 @@ import {
   Search,
   Settings,
   Sparkles,
+  Target,
   UserRound,
   UsersRound,
   X,
@@ -69,6 +70,11 @@ const navigation = [
     label: "Website Audit",
     icon: Globe2,
     to: "/website-audits",
+  },
+  {
+    label: "Opportunities",
+    icon: Target,
+    to: "/opportunities",
   },
   {
     label: "Proposals",

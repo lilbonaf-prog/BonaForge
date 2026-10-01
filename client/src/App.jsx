@@ -33,6 +33,9 @@ import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 import WebsiteAuditPage from "./pages/WebsiteAuditPage";
 import WebsiteAuditDetailsPage from "./pages/WebsiteAuditDetailsPage";
 
+import OpportunityAnalysisPage from "./pages/OpportunityAnalysisPage";
+import OpportunityAnalysisDetailsPage from "./pages/OpportunityAnalysisDetailsPage";
+
 function App() {
   return (
     <Routes>
@@ -170,6 +173,20 @@ function App() {
           path="/website-audits/:businessId"
           element={
             <WebsiteAuditDetailsPage />
+          }
+        />
+
+        <Route
+          path="/opportunities"
+          element={
+            <OpportunityAnalysisPage />
+          }
+        />
+
+        <Route
+          path="/opportunities/:businessId"
+          element={
+            <OpportunityAnalysisDetailsPage />
           }
         />
 

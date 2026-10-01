@@ -10,6 +10,9 @@ const businessRoutes = require("./routes/businessRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const researchRoutes = require("./routes/researchRoutes");
 const websiteAuditRoutes = require("./routes/websiteAuditRoutes");
+const opportunityAnalysisRoutes = require(
+  "./routes/opportunityAnalysisRoutes"
+);
 
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
@@ -80,6 +83,11 @@ app.use("/api/leads", leadRoutes);
 app.use("/api/research", researchRoutes);
 
 app.use("/api/website-audits", websiteAuditRoutes);
+
+app.use(
+  "/api/opportunity-analysis",
+  opportunityAnalysisRoutes
+);
 
 // ==============================
 // ERROR HANDLING

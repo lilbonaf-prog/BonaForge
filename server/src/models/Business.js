@@ -246,6 +246,11 @@ const businessSchema =
         default: false,
       },
 
+      opportunityAnalysisCompleted: {
+        type: Boolean,
+        default: false,
+      },
+
       convertedToLead: {
         type: Boolean,
         default: false,

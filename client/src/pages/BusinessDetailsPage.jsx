@@ -19,6 +19,7 @@ import {
   RefreshCw,
   Search,
   Sparkles,
+  Target,
   Trash2,
   UserPlus,
   X,
@@ -57,6 +58,9 @@ import useStartResearch from "../features/research/useStartResearch";
 
 import useWebsiteAuditByBusiness from "../features/websiteAudit/useWebsiteAuditByBusiness";
 import useStartWebsiteAudit from "../features/websiteAudit/useStartWebsiteAudit";
+
+import useOpportunityAnalysisByBusiness from "../features/opportunityAnalysis/useOpportunityAnalysisByBusiness";
+import useStartOpportunityAnalysis from "../features/opportunityAnalysis/useStartOpportunityAnalysis";
 
 import EditBusinessModal from "../features/businesses/EditBusinessModal";
 
@@ -211,6 +215,15 @@ function BusinessDetailsPage() {
   ] = useState("");
 
   // ==============================
+  // OPPORTUNITY ANALYSIS STATE
+  // ==============================
+
+  const [
+    opportunityAnalysisError,
+    setOpportunityAnalysisError,
+  ] = useState("");
+
+  // ==============================
   // BUSINESS QUERY
   // ==============================
 
@@ -252,6 +265,19 @@ function BusinessDetailsPage() {
   );
 
   // ==============================
+  // OPPORTUNITY ANALYSIS QUERY
+  // ==============================
+
+  const {
+    data: opportunityAnalysisData,
+    isLoading: isOpportunityAnalysisLoading,
+    isFetching: isOpportunityAnalysisFetching,
+    refetch: refetchOpportunityAnalysis,
+  } = useOpportunityAnalysisByBusiness(
+    businessId
+  );
+
+  // ==============================
   // MUTATIONS
   // ==============================
 
@@ -270,6 +296,9 @@ function BusinessDetailsPage() {
   const startWebsiteAuditMutation =
     useStartWebsiteAudit();
 
+  const startOpportunityAnalysisMutation =
+    useStartOpportunityAnalysis();
+
   const business =
     data?.business;
 
@@ -278,6 +307,9 @@ function BusinessDetailsPage() {
 
   const existingWebsiteAudit =
     websiteAuditData?.audit;
+
+  const existingOpportunityAnalysis =
+    opportunityAnalysisData?.analysis;
 
   // ==============================
   // UPDATE BUSINESS
@@ -442,6 +474,50 @@ function BusinessDetailsPage() {
     };
 
   // ==============================
+  // START / OPEN OPPORTUNITY ANALYSIS
+  // ==============================
+
+  const handleOpportunityAnalysisAction =
+    () => {
+      setOpportunityAnalysisError("");
+
+      if (
+        existingOpportunityAnalysis?._id
+      ) {
+        navigate(
+          `/opportunities/${businessId}`
+        );
+
+        return;
+      }
+
+      startOpportunityAnalysisMutation.mutate(
+        businessId,
+        {
+          onSuccess: () => {
+            navigate(
+              `/opportunities/${businessId}`
+            );
+          },
+
+          onError: (
+            mutationError
+          ) => {
+            setOpportunityAnalysisError(
+              mutationError
+                ?.response
+                ?.data
+                ?.message ||
+                mutationError
+                  ?.message ||
+                "Unable to start opportunity analysis."
+            );
+          },
+        }
+      );
+    };
+
+  // ==============================
   // REFRESH BUSINESS + WORKFLOW
   // ==============================
 
@@ -450,6 +526,7 @@ function BusinessDetailsPage() {
       refetch();
       refetchResearch();
       refetchWebsiteAudit();
+      refetchOpportunityAnalysis();
     };
 
   // ==============================
@@ -633,6 +710,8 @@ function BusinessDetailsPage() {
     startResearchMutation
       .isPending ||
     startWebsiteAuditMutation
+      .isPending ||
+    startOpportunityAnalysisMutation
       .isPending;
 
   return (
@@ -662,7 +741,8 @@ function BusinessDetailsPage() {
             disabled={
               isFetching ||
               isResearchFetching ||
-              isWebsiteAuditFetching
+              isWebsiteAuditFetching ||
+              isOpportunityAnalysisFetching
             }
             className="inline-flex h-9 items-center gap-2 rounded-xl border border-[var(--border-primary)] bg-white/[0.02] px-3 text-xs font-medium text-[var(--text-muted)] transition hover:bg-white/[0.05] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -671,7 +751,8 @@ function BusinessDetailsPage() {
               className={
                 isFetching ||
                 isResearchFetching ||
-                isWebsiteAuditFetching
+                isWebsiteAuditFetching ||
+                isOpportunityAnalysisFetching
                   ? "animate-spin"
                   : ""
               }
@@ -679,7 +760,8 @@ function BusinessDetailsPage() {
 
             {isFetching ||
             isResearchFetching ||
-            isWebsiteAuditFetching
+            isWebsiteAuditFetching ||
+            isOpportunityAnalysisFetching
               ? "Refreshing..."
               : "Refresh"}
           </button>
@@ -831,6 +913,35 @@ function BusinessDetailsPage() {
                       : "Start website audit"}
               </button>
 
+              <button
+                type="button"
+                onClick={
+                  handleOpportunityAnalysisAction
+                }
+                disabled={
+                  busy ||
+                  isOpportunityAnalysisLoading ||
+                  isOpportunityAnalysisFetching
+                }
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-violet-400/15 bg-violet-400/[0.06] px-4 text-xs font-semibold text-violet-200/80 transition hover:border-violet-300/25 hover:bg-violet-400/[0.1] hover:text-violet-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Target
+                  size={14}
+                />
+
+                {isOpportunityAnalysisLoading ||
+                isOpportunityAnalysisFetching
+                  ? "Checking analysis..."
+                  : startOpportunityAnalysisMutation
+                        .isPending
+                    ? existingOpportunityAnalysis?._id
+                      ? "Opening analysis..."
+                      : "Starting analysis..."
+                    : existingOpportunityAnalysis?._id
+                      ? "Open opportunity analysis"
+                      : "Start opportunity analysis"}
+              </button>
+
               {business.convertedToLead ? (
                 <button
                   type="button"
@@ -931,6 +1042,19 @@ function BusinessDetailsPage() {
 
             <span>
               {websiteAuditError}
+            </span>
+          </div>
+        ) : null}
+
+        {opportunityAnalysisError ? (
+          <div className="mt-4 flex items-start gap-3 rounded-2xl border border-rose-400/15 bg-rose-400/[0.06] px-4 py-3 text-sm leading-6 text-rose-200">
+            <CircleAlert
+              size={16}
+              className="mt-0.5 shrink-0"
+            />
+
+            <span>
+              {opportunityAnalysisError}
             </span>
           </div>
         ) : null}
@@ -1136,7 +1260,8 @@ function BusinessDetailsPage() {
 
               <p className="mt-1 text-xs leading-5 text-[var(--text-muted)]">
                 Follow this business
-                through research and
+                through research,
+                opportunity analysis and
                 lead conversion.
               </p>
 
@@ -1165,6 +1290,22 @@ function BusinessDetailsPage() {
                       .websiteAuditCompleted
                       ? "Completed"
                       : "Not completed"
+                  }
+                />
+
+                <WorkflowRow
+                  label="Opportunity analysis"
+                  value={
+                    business
+                      .opportunityAnalysisCompleted
+                      ? "Completed"
+                      : existingOpportunityAnalysis?._id
+                        ? "In progress"
+                        : "Not started"
+                  }
+                  success={
+                    business
+                      .opportunityAnalysisCompleted
                   }
                 />
 
