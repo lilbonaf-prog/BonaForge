@@ -13,6 +13,9 @@ const websiteAuditRoutes = require("./routes/websiteAuditRoutes");
 const opportunityAnalysisRoutes = require(
   "./routes/opportunityAnalysisRoutes"
 );
+const leadActivityRoutes = require(
+  "./routes/leadActivityRoutes"
+);
 
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
@@ -87,6 +90,11 @@ app.use("/api/website-audits", websiteAuditRoutes);
 app.use(
   "/api/opportunity-analysis",
   opportunityAnalysisRoutes
+);
+
+app.use(
+  "/api/lead-activities",
+  leadActivityRoutes
 );
 
 // ==============================

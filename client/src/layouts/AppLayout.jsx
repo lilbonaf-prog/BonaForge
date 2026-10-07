@@ -16,6 +16,7 @@ import {
   BarChart3,
   BriefcaseBusiness,
   Building2,
+  CalendarClock,
   ChevronRight,
   FileText,
   FolderKanban,
@@ -60,6 +61,11 @@ const navigation = [
     label: "Leads",
     icon: UsersRound,
     to: "/leads",
+  },
+  {
+    label: "Follow-Ups",
+    icon: CalendarClock,
+    to: "/follow-ups",
   },
   {
     label: "Research",

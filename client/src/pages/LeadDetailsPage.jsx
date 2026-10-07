@@ -24,6 +24,7 @@ import {
   UserRound,
 } from "lucide-react";
 
+import LeadActivityWorkspace from "../features/leadActivities/LeadActivityWorkspace";
 import EditLeadModal from "../features/leads/EditLeadModal";
 import useDeleteLead from "../features/leads/useDeleteLead";
 import useLead from "../features/leads/useLead";
@@ -578,6 +579,12 @@ const LeadDetailsPage = () => {
                 />
               </div>
             </SectionCard>
+
+            {/* CONTACT ACTIVITY */}
+
+            <LeadActivityWorkspace
+              leadId={lead._id}
+            />
 
             {/* NOTES */}
 
