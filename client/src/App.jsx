@@ -34,6 +34,9 @@ import ProposalDetailsPage from "./pages/ProposalDetailsPage";
 import QuotationsPage from "./pages/QuotationsPage";
 import QuotationDetailsPage from "./pages/QuotationDetailsPage";
 
+import ProjectsPage from "./pages/ProjectsPage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
+
 import ResearchPage from "./pages/ResearchPage";
 import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 
@@ -187,6 +190,20 @@ function App() {
           path="/quotations/:quotationId"
           element={
             <QuotationDetailsPage />
+          }
+        />
+
+        <Route
+          path="/projects"
+          element={
+            <ProjectsPage />
+          }
+        />
+
+        <Route
+          path="/projects/:projectId"
+          element={
+            <ProjectDetailsPage />
           }
         />
 

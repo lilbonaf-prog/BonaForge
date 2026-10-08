@@ -95,7 +95,7 @@ const navigation = [
   {
     label: "Projects",
     icon: FolderKanban,
-    comingSoon: true,
+    to: "/projects",
   },
   {
     label: "Invoices",

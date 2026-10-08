@@ -27,6 +27,10 @@ const quotationRoutes = require(
   "./routes/quotationRoutes"
 );
 
+const projectRoutes = require(
+  "./routes/projectRoutes"
+);
+
 const notFound = require(
   "./middleware/notFound"
 );
@@ -150,6 +154,11 @@ app.use(
 app.use(
   "/api/quotations",
   quotationRoutes
+);
+
+app.use(
+  "/api/projects",
+  projectRoutes
 );
 
 // ==============================

@@ -26,6 +26,7 @@ import {
 import LeadActivityWorkspace from "../features/leadActivities/LeadActivityWorkspace";
 import LeadProposalWorkspace from "../features/proposals/LeadProposalWorkspace";
 import LeadQuotationWorkspace from "../features/quotations/LeadQuotationWorkspace";
+import LeadProjectWorkspace from "../features/projects/LeadProjectWorkspace";
 
 import EditLeadModal from "../features/leads/EditLeadModal";
 import useDeleteLead from "../features/leads/useDeleteLead";
@@ -589,6 +590,12 @@ const LeadDetailsPage = () => {
 
             <LeadQuotationWorkspace
               leadId={lead._id}
+              lead={lead}
+            />
+
+            {/* PROJECT */}
+
+            <LeadProjectWorkspace
               lead={lead}
             />
 
