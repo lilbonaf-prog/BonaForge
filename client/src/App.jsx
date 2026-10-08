@@ -31,6 +31,9 @@ import FollowUpsPage from "./pages/FollowUpsPage";
 import ProposalsPage from "./pages/ProposalsPage";
 import ProposalDetailsPage from "./pages/ProposalDetailsPage";
 
+import QuotationsPage from "./pages/QuotationsPage";
+import QuotationDetailsPage from "./pages/QuotationDetailsPage";
+
 import ResearchPage from "./pages/ResearchPage";
 import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 
@@ -170,6 +173,20 @@ function App() {
           path="/proposals/:proposalId"
           element={
             <ProposalDetailsPage />
+          }
+        />
+
+        <Route
+          path="/quotations"
+          element={
+            <QuotationsPage />
+          }
+        />
+
+        <Route
+          path="/quotations/:quotationId"
+          element={
+            <QuotationDetailsPage />
           }
         />
 

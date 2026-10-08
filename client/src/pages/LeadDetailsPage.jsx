@@ -1,5 +1,4 @@
 import {
-  useMemo,
   useState,
 } from "react";
 
@@ -26,6 +25,8 @@ import {
 
 import LeadActivityWorkspace from "../features/leadActivities/LeadActivityWorkspace";
 import LeadProposalWorkspace from "../features/proposals/LeadProposalWorkspace";
+import LeadQuotationWorkspace from "../features/quotations/LeadQuotationWorkspace";
+
 import EditLeadModal from "../features/leads/EditLeadModal";
 import useDeleteLead from "../features/leads/useDeleteLead";
 import useLead from "../features/leads/useLead";
@@ -141,16 +142,8 @@ const LeadDetailsPage = () => {
     data?.lead;
 
   const services =
-    useMemo(
-      () =>
-        lead
-          ?.servicesInterestedIn ||
-        [],
-      [
-        lead
-          ?.servicesInterestedIn,
-      ]
-    );
+    lead?.servicesInterestedIn ||
+    [];
 
   const companyName =
     lead?.companyName ||
@@ -197,6 +190,7 @@ const LeadDetailsPage = () => {
       {
         onSuccess: () => {
           setUpdateError("");
+
           setIsEditOpen(
             false
           );
@@ -427,9 +421,7 @@ const LeadDetailsPage = () => {
                 </div>
 
                 <h1 className="mt-5 break-words text-3xl font-semibold tracking-tight text-white md:text-4xl">
-                  {
-                    lead.name
-                  }
+                  {lead.name}
                 </h1>
 
                 <p className="mt-2 text-base text-white/45">
@@ -593,6 +585,13 @@ const LeadDetailsPage = () => {
               lead={lead}
             />
 
+            {/* QUOTATIONS */}
+
+            <LeadQuotationWorkspace
+              leadId={lead._id}
+              lead={lead}
+            />
+
             {/* NOTES */}
 
             <SectionCard
@@ -605,6 +604,10 @@ const LeadDetailsPage = () => {
               </p>
             </SectionCard>
           </div>
+
+          {/* ============================== */}
+          {/* RIGHT COLUMN */}
+          {/* ============================== */}
 
           <div className="space-y-6">
             {/* FOLLOW UP */}

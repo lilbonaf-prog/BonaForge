@@ -88,6 +88,11 @@ const navigation = [
     to: "/proposals",
   },
   {
+    label: "Quotations",
+    icon: ReceiptText,
+    to: "/quotations",
+  },
+  {
     label: "Projects",
     icon: FolderKanban,
     comingSoon: true,

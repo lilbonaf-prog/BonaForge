@@ -10,18 +10,30 @@ const businessRoutes = require("./routes/businessRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const researchRoutes = require("./routes/researchRoutes");
 const websiteAuditRoutes = require("./routes/websiteAuditRoutes");
+
 const opportunityAnalysisRoutes = require(
   "./routes/opportunityAnalysisRoutes"
 );
+
 const leadActivityRoutes = require(
   "./routes/leadActivityRoutes"
 );
+
 const proposalRoutes = require(
   "./routes/proposalRoutes"
 );
 
-const notFound = require("./middleware/notFound");
-const errorHandler = require("./middleware/errorHandler");
+const quotationRoutes = require(
+  "./routes/quotationRoutes"
+);
+
+const notFound = require(
+  "./middleware/notFound"
+);
+
+const errorHandler = require(
+  "./middleware/errorHandler"
+);
 
 const app = express();
 
@@ -52,12 +64,19 @@ app.use(
 // RATE LIMITING
 // ==============================
 
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 100,
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-});
+const apiLimiter =
+  rateLimit({
+    windowMs:
+      15 * 60 * 1000,
+
+    limit: 100,
+
+    standardHeaders:
+      "draft-8",
+
+    legacyHeaders:
+      false,
+  });
 
 app.use(apiLimiter);
 
@@ -68,7 +87,9 @@ app.use(apiLimiter);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "BonaForge API is running successfully",
+
+    message:
+      "BonaForge API is running successfully",
   });
 });
 
@@ -76,19 +97,40 @@ app.get("/", (req, res) => {
 // API ROUTES
 // ==============================
 
-app.use("/api/health", healthRoutes);
+app.use(
+  "/api/health",
+  healthRoutes
+);
 
-app.use("/api/auth", authRoutes);
+app.use(
+  "/api/auth",
+  authRoutes
+);
 
-app.use("/api/dashboard", dashboardRoutes);
+app.use(
+  "/api/dashboard",
+  dashboardRoutes
+);
 
-app.use("/api/businesses", businessRoutes);
+app.use(
+  "/api/businesses",
+  businessRoutes
+);
 
-app.use("/api/leads", leadRoutes);
+app.use(
+  "/api/leads",
+  leadRoutes
+);
 
-app.use("/api/research", researchRoutes);
+app.use(
+  "/api/research",
+  researchRoutes
+);
 
-app.use("/api/website-audits", websiteAuditRoutes);
+app.use(
+  "/api/website-audits",
+  websiteAuditRoutes
+);
 
 app.use(
   "/api/opportunity-analysis",
@@ -103,6 +145,11 @@ app.use(
 app.use(
   "/api/proposals",
   proposalRoutes
+);
+
+app.use(
+  "/api/quotations",
+  quotationRoutes
 );
 
 // ==============================
