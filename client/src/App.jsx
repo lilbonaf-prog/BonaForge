@@ -28,6 +28,9 @@ import LeadsPage from "./pages/LeadsPage";
 import LeadDetailsPage from "./pages/LeadDetailsPage";
 import FollowUpsPage from "./pages/FollowUpsPage";
 
+import ProposalsPage from "./pages/ProposalsPage";
+import ProposalDetailsPage from "./pages/ProposalDetailsPage";
+
 import ResearchPage from "./pages/ResearchPage";
 import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 
@@ -153,6 +156,20 @@ function App() {
           path="/follow-ups"
           element={
             <FollowUpsPage />
+          }
+        />
+
+        <Route
+          path="/proposals"
+          element={
+            <ProposalsPage />
+          }
+        />
+
+        <Route
+          path="/proposals/:proposalId"
+          element={
+            <ProposalDetailsPage />
           }
         />
 

@@ -16,6 +16,9 @@ const opportunityAnalysisRoutes = require(
 const leadActivityRoutes = require(
   "./routes/leadActivityRoutes"
 );
+const proposalRoutes = require(
+  "./routes/proposalRoutes"
+);
 
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
@@ -95,6 +98,11 @@ app.use(
 app.use(
   "/api/lead-activities",
   leadActivityRoutes
+);
+
+app.use(
+  "/api/proposals",
+  proposalRoutes
 );
 
 // ==============================

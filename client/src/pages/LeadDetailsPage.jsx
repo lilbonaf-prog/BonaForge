@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 import LeadActivityWorkspace from "../features/leadActivities/LeadActivityWorkspace";
+import LeadProposalWorkspace from "../features/proposals/LeadProposalWorkspace";
 import EditLeadModal from "../features/leads/EditLeadModal";
 import useDeleteLead from "../features/leads/useDeleteLead";
 import useLead from "../features/leads/useLead";
@@ -584,6 +585,12 @@ const LeadDetailsPage = () => {
 
             <LeadActivityWorkspace
               leadId={lead._id}
+            />
+
+            {/* PROPOSALS */}
+
+            <LeadProposalWorkspace
+              lead={lead}
             />
 
             {/* NOTES */}

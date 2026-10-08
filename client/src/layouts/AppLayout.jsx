@@ -85,7 +85,7 @@ const navigation = [
   {
     label: "Proposals",
     icon: FileText,
-    comingSoon: true,
+    to: "/proposals",
   },
   {
     label: "Projects",
