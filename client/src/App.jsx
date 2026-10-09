@@ -43,6 +43,8 @@ import InvoiceDetailsPage from "./pages/InvoiceDetailsPage";
 import PaymentsPage from "./pages/PaymentsPage";
 import PaymentDetailsPage from "./pages/PaymentDetailsPage";
 
+import AnalyticsPage from "./pages/AnalyticsPage";
+
 import ResearchPage from "./pages/ResearchPage";
 import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 
@@ -238,6 +240,13 @@ function App() {
           path="/payments/:paymentId"
           element={
             <PaymentDetailsPage />
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <AnalyticsPage />
           }
         />
 

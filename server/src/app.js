@@ -39,6 +39,10 @@ const paymentRoutes = require(
   "./routes/paymentRoutes"
 );
 
+const analyticsRoutes = require(
+  "./routes/analyticsRoutes"
+);
+
 const notFound = require(
   "./middleware/notFound"
 );
@@ -177,6 +181,11 @@ app.use(
 app.use(
   "/api/payments",
   paymentRoutes
+);
+
+app.use(
+  "/api/analytics",
+  analyticsRoutes
 );
 
 // ==============================

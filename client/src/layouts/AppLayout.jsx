@@ -111,7 +111,7 @@ const navigation = [
   {
     label: "Analytics",
     icon: BarChart3,
-    comingSoon: true,
+    to: "/analytics",
   },
 ];
 
