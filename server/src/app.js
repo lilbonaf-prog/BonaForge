@@ -31,6 +31,10 @@ const projectRoutes = require(
   "./routes/projectRoutes"
 );
 
+const invoiceRoutes = require(
+  "./routes/invoiceRoutes"
+);
+
 const notFound = require(
   "./middleware/notFound"
 );
@@ -159,6 +163,11 @@ app.use(
 app.use(
   "/api/projects",
   projectRoutes
+);
+
+app.use(
+  "/api/invoices",
+  invoiceRoutes
 );
 
 // ==============================

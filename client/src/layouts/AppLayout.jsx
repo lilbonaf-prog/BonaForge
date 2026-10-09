@@ -100,7 +100,7 @@ const navigation = [
   {
     label: "Invoices",
     icon: ReceiptText,
-    comingSoon: true,
+    to: "/invoices",
   },
   {
     label: "Analytics",

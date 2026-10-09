@@ -39,6 +39,7 @@ import useAddMilestone from "../features/projects/useAddMilestone";
 import useUpdateMilestone from "../features/projects/useUpdateMilestone";
 import useDeleteMilestone from "../features/projects/useDeleteMilestone";
 import useDeleteProject from "../features/projects/useDeleteProject";
+import ProjectInvoiceWorkspace from "../features/invoices/ProjectInvoiceWorkspace";
 
 const statusClasses = {
   planned:
@@ -1762,6 +1763,10 @@ const ProjectDetailsPage = () => {
               </div>
             )}
           </Section>
+
+          <ProjectInvoiceWorkspace
+            project={project}
+          />
 
           <Section
             title="Notes"
