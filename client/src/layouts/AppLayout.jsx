@@ -31,6 +31,7 @@ import {
   Target,
   UserRound,
   UsersRound,
+  WalletCards,
   X,
 } from "lucide-react";
 
@@ -101,6 +102,11 @@ const navigation = [
     label: "Invoices",
     icon: ReceiptText,
     to: "/invoices",
+  },
+  {
+    label: "Payments",
+    icon: WalletCards,
+    to: "/payments",
   },
   {
     label: "Analytics",

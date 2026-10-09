@@ -40,6 +40,9 @@ import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import InvoicesPage from "./pages/InvoicesPage";
 import InvoiceDetailsPage from "./pages/InvoiceDetailsPage";
 
+import PaymentsPage from "./pages/PaymentsPage";
+import PaymentDetailsPage from "./pages/PaymentDetailsPage";
+
 import ResearchPage from "./pages/ResearchPage";
 import ResearchDetailsPage from "./pages/ResearchDetailsPage";
 
@@ -221,6 +224,20 @@ function App() {
           path="/invoices/:invoiceId"
           element={
             <InvoiceDetailsPage />
+          }
+        />
+
+        <Route
+          path="/payments"
+          element={
+            <PaymentsPage />
+          }
+        />
+
+        <Route
+          path="/payments/:paymentId"
+          element={
+            <PaymentDetailsPage />
           }
         />
 

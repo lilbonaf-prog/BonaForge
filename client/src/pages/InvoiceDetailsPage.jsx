@@ -34,6 +34,7 @@ import useMarkInvoiceOverdue from "../features/invoices/useMarkInvoiceOverdue";
 import useCancelInvoice from "../features/invoices/useCancelInvoice";
 import useReopenInvoice from "../features/invoices/useReopenInvoice";
 import useDeleteInvoice from "../features/invoices/useDeleteInvoice";
+import InvoicePaymentWorkspace from "../features/payments/InvoicePaymentWorkspace";
 
 const statusClasses = {
   draft:
@@ -1301,6 +1302,10 @@ const InvoiceDetailsPage = () => {
               </p>
             )}
           </Section>
+
+          <InvoicePaymentWorkspace
+            invoice={invoice}
+          />
 
           <Section
             title="Payment terms"
