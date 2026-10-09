@@ -1,5 +1,36 @@
-const Business = require("../models/Business");
-const Lead = require("../models/Lead");
+const Business = require(
+  "../models/Business"
+);
+
+const Lead = require(
+  "../models/Lead"
+);
+
+const Project = require(
+  "../models/Project"
+);
+
+const Proposal = require(
+  "../models/Proposal"
+);
+
+const Invoice = require(
+  "../models/Invoice"
+);
+
+const Payment = require(
+  "../models/Payment"
+);
+
+// ==============================
+// DASHBOARD CONSTANTS
+// ==============================
+
+const ACTIVE_PROJECT_STATUSES = [
+  "planned",
+  "in_progress",
+  "on_hold",
+];
 
 // ==============================
 // GET DASHBOARD OVERVIEW
@@ -11,40 +42,80 @@ const getDashboardOverview = async (
   next
 ) => {
   try {
+    const userId =
+      req.user._id;
+
     // ==============================
-    // REAL DATABASE COUNTS
+    // REAL DATABASE DATA
     // ==============================
 
     const [
       businessCount,
       leadCount,
+      activeProjectCount,
+      proposalCount,
+      invoiceCount,
+      revenueResult,
     ] = await Promise.all([
       Business.countDocuments({
-        createdBy: req.user._id,
+        createdBy: userId,
       }),
 
       Lead.countDocuments({
-        createdBy: req.user._id,
+        createdBy: userId,
       }),
+
+      Project.countDocuments({
+        createdBy: userId,
+
+        status: {
+          $in:
+            ACTIVE_PROJECT_STATUSES,
+        },
+      }),
+
+      Proposal.countDocuments({
+        createdBy: userId,
+      }),
+
+      Invoice.countDocuments({
+        createdBy: userId,
+      }),
+
+      Payment.aggregate([
+        {
+          $match: {
+            createdBy:
+              userId,
+
+            status:
+              "completed",
+          },
+        },
+
+        {
+          $group: {
+            _id: null,
+
+            total: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]),
     ]);
 
     // ==============================
-    // FUTURE MODULE PLACEHOLDERS
-    // ==============================
-    //
-    // These values stay at 0 until their
-    // actual modules and database models
-    // are built.
-    //
-    // We do NOT import models that do not
-    // exist yet because that would crash
-    // the server.
+    // REVENUE
     // ==============================
 
-    const activeProjectCount = 0;
-    const proposalCount = 0;
-    const invoiceCount = 0;
-    const revenueTotal = 0;
+    const revenueTotal =
+      revenueResult.length > 0
+        ? Number(
+            revenueResult[0]
+              .total
+          ) || 0
+        : 0;
 
     // ==============================
     // DASHBOARD RESPONSE
@@ -79,9 +150,14 @@ const getDashboardOverview = async (
         },
 
         user: {
-          id: req.user._id,
-          name: req.user.name,
-          email: req.user.email,
+          id:
+            req.user._id,
+
+          name:
+            req.user.name,
+
+          email:
+            req.user.email,
         },
       });
   } catch (error) {
