@@ -43,6 +43,10 @@ const analyticsRoutes = require(
   "./routes/analyticsRoutes"
 );
 
+const publicShareRoutes = require(
+  "./routes/publicShareRoutes"
+);
+
 const notFound = require(
   "./middleware/notFound"
 );
@@ -94,9 +98,6 @@ const corsOptions = {
     origin,
     callback
   ) => {
-    // Allow requests that do not send an
-    // Origin header, such as Postman,
-    // backend services and local tests.
     if (!origin) {
       return callback(
         null,
@@ -168,7 +169,16 @@ app.get("/", (req, res) => {
 });
 
 // ==============================
-// API ROUTES
+// PUBLIC READ-ONLY ROUTES
+// ==============================
+
+app.use(
+  "/api/share",
+  publicShareRoutes
+);
+
+// ==============================
+// PRIVATE ADMIN API ROUTES
 // ==============================
 
 app.use(
@@ -250,10 +260,7 @@ app.use(
 // ERROR HANDLING
 // ==============================
 
-// Must come after all valid routes
 app.use(notFound);
-
-// Must always be final middleware
 app.use(errorHandler);
 
 module.exports = app;

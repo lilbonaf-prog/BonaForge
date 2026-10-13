@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import {
   useForm,
@@ -15,6 +18,7 @@ import {
   EyeOff,
   LockKeyhole,
   Mail,
+  ShieldCheck,
 } from "lucide-react";
 
 import {
@@ -90,7 +94,8 @@ function LoginPage() {
             size={13}
             className="text-[var(--brand-accent)]"
           />
-          Secure sign in
+
+          Administrator access
         </div>
 
         <h2 className="text-3xl font-semibold tracking-[-0.035em] text-white sm:text-[2.15rem]">
@@ -98,7 +103,7 @@ function LoginPage() {
         </h2>
 
         <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
-          Sign in to continue managing your
+          Sign in to manage your private
           BonaForge workspace.
         </p>
       </div>
@@ -239,26 +244,27 @@ function LoginPage() {
         </button>
       </form>
 
-      <div className="my-7 flex items-center gap-4">
-        <div className="h-px flex-1 bg-[var(--border-primary)]" />
+      <div className="mt-7 rounded-2xl border border-[var(--border-primary)] bg-white/[0.025] p-4">
+        <div className="flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-400/[0.06] text-emerald-300">
+            <ShieldCheck
+              size={17}
+            />
+          </div>
 
-        <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-muted)]">
-          New workspace
-        </span>
+          <div>
+            <p className="text-sm font-semibold text-white">
+              Private administrator workspace
+            </p>
 
-        <div className="h-px flex-1 bg-[var(--border-primary)]" />
-      </div>
-
-      <div className="rounded-2xl border border-[var(--border-primary)] bg-white/[0.025] p-4 text-center">
-        <p className="text-sm text-[var(--text-secondary)]">
-          Don&apos;t have an account?{" "}
-          <Link
-            to="/register"
-            className="font-semibold text-white transition-colors hover:text-[var(--brand-secondary)]"
-          >
-            Create your BonaForge account
-          </Link>
-        </p>
+            <p className="mt-1 text-xs leading-5 text-[var(--text-muted)]">
+              Account creation is disabled.
+              Only the authorized BonaForge
+              administrator can sign in to this
+              workspace.
+            </p>
+          </div>
+        </div>
       </div>
 
       <p className="mt-7 text-center text-[11px] leading-5 text-[var(--text-muted)]">

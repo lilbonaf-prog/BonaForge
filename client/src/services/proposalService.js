@@ -107,6 +107,51 @@ export const reopenProposal = async (
   return response.data;
 };
 
+// ==============================
+// SECURE CLIENT SHARING
+// ==============================
+
+export const createProposalShareLink =
+  async ({
+    proposalId,
+    expiresInDays = 30,
+  }) => {
+    const response = await api.post(
+      `/proposals/${proposalId}/share`,
+      {
+        expiresInDays,
+      }
+    );
+
+    return response.data;
+  };
+
+export const revokeProposalShareLink =
+  async (
+    proposalId
+  ) => {
+    const response = await api.delete(
+      `/proposals/${proposalId}/share`
+    );
+
+    return response.data;
+  };
+
+// ==============================
+// PUBLIC READ-ONLY PROPOSAL
+// ==============================
+
+export const getPublicProposalByToken =
+  async (
+    token
+  ) => {
+    const response = await api.get(
+      `/share/proposal/${token}`
+    );
+
+    return response.data;
+  };
+
 export const deleteProposal = async (
   proposalId
 ) => {

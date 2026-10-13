@@ -1,7 +1,6 @@
 const express = require("express");
 
 const {
-  registerUser,
   loginUser,
   getCurrentUser,
   updateProfile,
@@ -24,6 +23,10 @@ const {
   authActionLimiter,
 } = require("../middleware/authRateLimiter");
 
+const adminLoginOnly = require(
+  "../middleware/adminLoginOnly"
+);
+
 const uploadAvatar = require(
   "../middleware/uploadAvatar"
 );
@@ -34,15 +37,13 @@ const router = express.Router();
 // PUBLIC AUTH ROUTES
 // ==============================
 
-router.post(
-  "/register",
-  authActionLimiter,
-  registerUser
-);
+// Registration is intentionally disabled.
+// BonaForge is a single-admin application.
 
 router.post(
   "/login",
   loginLimiter,
+  adminLoginOnly,
   loginUser
 );
 
@@ -64,7 +65,7 @@ router.get(
 );
 
 // ==============================
-// PROTECTED AUTH ROUTES
+// PROTECTED ADMIN ROUTES
 // ==============================
 
 router.get(

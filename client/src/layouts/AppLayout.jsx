@@ -26,6 +26,7 @@ import {
   Menu,
   ReceiptText,
   Search,
+  Share2,
   Settings,
   Sparkles,
   Target,
@@ -87,6 +88,11 @@ const navigation = [
     label: "Proposals",
     icon: FileText,
     to: "/proposals",
+  },
+  {
+    label: "Client Sharing",
+    icon: Share2,
+    to: "/client-sharing",
   },
   {
     label: "Quotations",

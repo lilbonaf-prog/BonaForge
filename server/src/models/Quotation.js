@@ -1,6 +1,9 @@
 const mongoose =
   require("mongoose");
 
+const crypto =
+  require("crypto");
+
 const quotationLineItemSchema =
   new mongoose.Schema(
     {
@@ -192,6 +195,38 @@ const quotationSchema =
         type: Date,
         default: null,
       },
+
+      // ==============================
+      // SECURE CLIENT SHARE ACCESS
+      // ==============================
+
+      shareAccess: {
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+
+        tokenHash: {
+          type: String,
+          default: undefined,
+          select: false,
+        },
+
+        createdAt: {
+          type: Date,
+          default: null,
+        },
+
+        expiresAt: {
+          type: Date,
+          default: null,
+        },
+
+        revokedAt: {
+          type: Date,
+          default: null,
+        },
+      },
     },
     {
       timestamps: true,
@@ -284,6 +319,93 @@ quotationSchema.pre(
 );
 
 // ==============================
+// CREATE SECURE SHARE TOKEN
+// ==============================
+
+quotationSchema.methods.createShareToken =
+  function (
+    expiresInDays = 30
+  ) {
+    const rawToken =
+      crypto
+        .randomBytes(32)
+        .toString("hex");
+
+    const tokenHash =
+      crypto
+        .createHash(
+          "sha256"
+        )
+        .update(rawToken)
+        .digest("hex");
+
+    const now =
+      new Date();
+
+    const requestedDays =
+      Number(
+        expiresInDays
+      );
+
+    const safeDays =
+      Number.isFinite(
+        requestedDays
+      ) &&
+      requestedDays > 0
+        ? requestedDays
+        : 30;
+
+    this.shareAccess = {
+      enabled: true,
+
+      tokenHash,
+
+      createdAt: now,
+
+      expiresAt:
+        new Date(
+          now.getTime() +
+            safeDays *
+              24 *
+              60 *
+              60 *
+              1000
+        ),
+
+      revokedAt: null,
+    };
+
+    return rawToken;
+  };
+
+// ==============================
+// REVOKE SECURE SHARE TOKEN
+// ==============================
+
+quotationSchema.methods.revokeShareToken =
+  function () {
+    this.shareAccess = {
+      enabled: false,
+
+      tokenHash:
+        undefined,
+
+      createdAt:
+        this.shareAccess
+          ?.createdAt ||
+        null,
+
+      expiresAt:
+        this.shareAccess
+          ?.expiresAt ||
+        null,
+
+      revokedAt:
+        new Date(),
+    };
+  };
+
+// ==============================
 // INDEXES
 // ==============================
 
@@ -320,6 +442,17 @@ quotationSchema.index({
   proposal: 1,
   createdAt: -1,
 });
+
+quotationSchema.index(
+  {
+    "shareAccess.tokenHash":
+      1,
+  },
+  {
+    unique: true,
+    sparse: true,
+  }
+);
 
 module.exports =
   mongoose.model(

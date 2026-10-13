@@ -111,6 +111,51 @@ export const reopenQuotation =
     return response.data;
   };
 
+// ==============================
+// SECURE CLIENT SHARING
+// ==============================
+
+export const createQuotationShareLink =
+  async ({
+    quotationId,
+    expiresInDays = 30,
+  }) => {
+    const response = await api.post(
+      `/quotations/${quotationId}/share`,
+      {
+        expiresInDays,
+      }
+    );
+
+    return response.data;
+  };
+
+export const revokeQuotationShareLink =
+  async (
+    quotationId
+  ) => {
+    const response = await api.delete(
+      `/quotations/${quotationId}/share`
+    );
+
+    return response.data;
+  };
+
+// ==============================
+// PUBLIC READ-ONLY QUOTATION
+// ==============================
+
+export const getPublicQuotationByToken =
+  async (
+    token
+  ) => {
+    const response = await api.get(
+      `/share/quotation/${token}`
+    );
+
+    return response.data;
+  };
+
 export const deleteQuotation =
   async (quotationId) => {
     const response = await api.delete(

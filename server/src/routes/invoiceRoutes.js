@@ -19,6 +19,13 @@ const {
 );
 
 const {
+  createInvoiceShareLink,
+  revokeInvoiceShareLink,
+} = require(
+  "../controllers/invoiceShareController"
+);
+
+const {
   protect,
 } = require(
   "../middleware/authMiddleware"
@@ -86,6 +93,21 @@ router.post(
 );
 
 // ==============================
+// CLIENT SHARE LINK
+// ADMIN ONLY
+// ==============================
+
+router.post(
+  "/:invoiceId/share",
+  createInvoiceShareLink
+);
+
+router.delete(
+  "/:invoiceId/share",
+  revokeInvoiceShareLink
+);
+
+// ==============================
 // SINGLE INVOICE ROUTES
 // ==============================
 
@@ -104,4 +126,5 @@ router.delete(
   deleteInvoice
 );
 
-module.exports = router;
+module.exports =
+  router;

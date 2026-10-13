@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 const invoiceItemSchema =
   new mongoose.Schema(
@@ -52,35 +53,45 @@ const invoiceSchema =
   new mongoose.Schema(
     {
       createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
         ref: "User",
         required: true,
         index: true,
       },
 
       project: {
-        type: mongoose.Schema.Types.ObjectId,
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
         ref: "Project",
         required: true,
         index: true,
       },
 
       lead: {
-        type: mongoose.Schema.Types.ObjectId,
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
         ref: "Lead",
         required: true,
         index: true,
       },
 
       business: {
-        type: mongoose.Schema.Types.ObjectId,
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
         ref: "Business",
         default: null,
         index: true,
       },
 
       quotation: {
-        type: mongoose.Schema.Types.ObjectId,
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
         ref: "Quotation",
         default: null,
         index: true,
@@ -127,7 +138,9 @@ const invoiceSchema =
       },
 
       items: {
-        type: [invoiceItemSchema],
+        type: [
+          invoiceItemSchema,
+        ],
         default: [],
       },
 
@@ -240,6 +253,8 @@ const invoiceSchema =
         default: "",
       },
 
+      // Private admin notes.
+      // Never expose this through public sharing.
       notes: {
         type: String,
         trim: true,
@@ -249,17 +264,55 @@ const invoiceSchema =
         ],
         default: "",
       },
+
+      // ==============================
+      // SECURE CLIENT SHARE ACCESS
+      // ==============================
+
+      shareAccess: {
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+
+        tokenHash: {
+          type: String,
+          default: undefined,
+          select: false,
+        },
+
+        createdAt: {
+          type: Date,
+          default: null,
+        },
+
+        expiresAt: {
+          type: Date,
+          default: null,
+        },
+
+        revokedAt: {
+          type: Date,
+          default: null,
+        },
+      },
     },
     {
       timestamps: true,
     }
   );
 
+// ==============================
+// CALCULATE TOTALS
+// ==============================
+
 invoiceSchema.pre(
   "validate",
   function () {
     this.items =
-      Array.isArray(this.items)
+      Array.isArray(
+        this.items
+      )
         ? this.items
         : [];
 
@@ -381,6 +434,101 @@ invoiceSchema.pre(
   }
 );
 
+// ==============================
+// CREATE SECURE SHARE TOKEN
+// ==============================
+
+invoiceSchema.methods.createShareToken =
+  function (
+    expiresInDays = 30
+  ) {
+    const rawToken =
+      crypto
+        .randomBytes(32)
+        .toString("hex");
+
+    const tokenHash =
+      crypto
+        .createHash(
+          "sha256"
+        )
+        .update(
+          rawToken
+        )
+        .digest("hex");
+
+    const now =
+      new Date();
+
+    const requestedDays =
+      Number(
+        expiresInDays
+      );
+
+    const safeDays =
+      Number.isFinite(
+        requestedDays
+      ) &&
+      requestedDays > 0
+        ? requestedDays
+        : 30;
+
+    this.shareAccess = {
+      enabled: true,
+
+      tokenHash,
+
+      createdAt:
+        now,
+
+      expiresAt:
+        new Date(
+          now.getTime() +
+            safeDays *
+              24 *
+              60 *
+              60 *
+              1000
+        ),
+
+      revokedAt:
+        null,
+    };
+
+    return rawToken;
+  };
+
+// ==============================
+// REVOKE SECURE SHARE TOKEN
+// ==============================
+
+invoiceSchema.methods.revokeShareToken =
+  function () {
+    this.shareAccess = {
+      enabled: false,
+
+      tokenHash:
+        undefined,
+
+      createdAt:
+        this.shareAccess
+          ?.createdAt ||
+        null,
+
+      expiresAt:
+        this.shareAccess
+          ?.expiresAt ||
+        null,
+
+      revokedAt:
+        new Date(),
+    };
+  };
+
+// ==============================
+// INDEXES
+// ==============================
+
 invoiceSchema.index(
   {
     createdBy: 1,
@@ -419,6 +567,17 @@ invoiceSchema.index({
   createdBy: 1,
   createdAt: -1,
 });
+
+invoiceSchema.index(
+  {
+    "shareAccess.tokenHash":
+      1,
+  },
+  {
+    unique: true,
+    sparse: true,
+  }
+);
 
 const Invoice =
   mongoose.model(

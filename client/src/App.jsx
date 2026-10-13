@@ -14,20 +14,61 @@ import {
   PublicOnlyRoute,
 } from "./features/auth/AuthRoute";
 
+import PublicLayout from "./layouts/PublicLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import AppLayout from "./layouts/AppLayout";
+
+// ==============================
+// PUBLIC VISITOR PAGES
+// ==============================
+
+const PublicHomePage = lazy(
+  () =>
+    import(
+      "./pages/PublicHomePage"
+    )
+);
+
+const PublicDemoPage = lazy(
+  () =>
+    import(
+      "./pages/PublicDemoPage"
+    )
+);
+
+// ==============================
+// PUBLIC CLIENT SHARE PAGES
+// ==============================
+
+const SharedProposalPage = lazy(
+  () =>
+    import(
+      "./pages/SharedProposalPage"
+    )
+);
+
+const SharedQuotationPage = lazy(
+  () =>
+    import(
+      "./pages/SharedQuotationPage"
+    )
+);
+
+const SharedInvoicePage = lazy(
+  () =>
+    import(
+      "./pages/SharedInvoicePage"
+    )
+);
+
+// ==============================
+// AUTH PAGES
+// ==============================
 
 const LoginPage = lazy(
   () =>
     import(
       "./pages/LoginPage"
-    )
-);
-
-const RegisterPage = lazy(
-  () =>
-    import(
-      "./pages/RegisterPage"
     )
 );
 
@@ -54,6 +95,10 @@ const VerifyEmailPage =
         "./pages/VerifyEmailPage"
       )
   );
+
+// ==============================
+// PRIVATE ADMIN PAGES
+// ==============================
 
 const DashboardPage = lazy(
   () =>
@@ -119,6 +164,13 @@ const ProposalDetailsPage =
         "./pages/ProposalDetailsPage"
       )
   );
+
+const ClientSharingPage = lazy(
+  () =>
+    import(
+      "./pages/ClientSharingPage"
+    )
+);
 
 const QuotationsPage = lazy(
   () =>
@@ -234,13 +286,17 @@ const OpportunityAnalysisDetailsPage =
       )
   );
 
+// ==============================
+// LAZY ROUTE LOADER
+// ==============================
+
 const RouteLoader = () => (
   <div className="flex min-h-[420px] w-full items-center justify-center">
     <div className="text-center">
       <div className="mx-auto h-9 w-9 animate-spin rounded-full border-2 border-white/10 border-t-indigo-300" />
 
       <p className="mt-4 text-sm font-medium text-white/35">
-        Loading workspace...
+        Loading BonaForge...
       </p>
     </div>
   </div>
@@ -261,19 +317,68 @@ const LazyRoute = ({
 function App() {
   return (
     <Routes>
-      {/* ROOT */}
+      {/* ============================== */}
+      {/* PUBLIC VISITOR EXPERIENCE */}
+      {/* ============================== */}
 
       <Route
-        path="/"
         element={
-          <Navigate
-            to="/login"
-            replace
-          />
+          <PublicLayout />
+        }
+      >
+        <Route
+          path="/"
+          element={
+            <LazyRoute>
+              <PublicHomePage />
+            </LazyRoute>
+          }
+        />
+
+        <Route
+          path="/demo"
+          element={
+            <LazyRoute>
+              <PublicDemoPage />
+            </LazyRoute>
+          }
+        />
+      </Route>
+
+      {/* ============================== */}
+      {/* PUBLIC CLIENT SHARE */}
+      {/* ============================== */}
+
+      <Route
+        path="/share/proposal/:token"
+        element={
+          <LazyRoute>
+            <SharedProposalPage />
+          </LazyRoute>
         }
       />
 
-      {/* PUBLIC AUTH ROUTES */}
+      <Route
+        path="/share/quotation/:token"
+        element={
+          <LazyRoute>
+            <SharedQuotationPage />
+          </LazyRoute>
+        }
+      />
+
+      <Route
+        path="/share/invoice/:token"
+        element={
+          <LazyRoute>
+            <SharedInvoicePage />
+          </LazyRoute>
+        }
+      />
+
+      {/* ============================== */}
+      {/* ADMIN LOGIN */}
+      {/* ============================== */}
 
       <Route
         element={
@@ -292,15 +397,6 @@ function App() {
         />
 
         <Route
-          path="/register"
-          element={
-            <LazyRoute>
-              <RegisterPage />
-            </LazyRoute>
-          }
-        />
-
-        <Route
           path="/forgot-password"
           element={
             <LazyRoute>
@@ -310,7 +406,9 @@ function App() {
         />
       </Route>
 
+      {/* ============================== */}
       {/* TOKEN AUTH ROUTES */}
+      {/* ============================== */}
 
       <Route
         element={
@@ -336,7 +434,9 @@ function App() {
         />
       </Route>
 
-      {/* PROTECTED APPLICATION */}
+      {/* ============================== */}
+      {/* PRIVATE ADMIN APPLICATION */}
+      {/* ============================== */}
 
       <Route
         element={
@@ -413,6 +513,15 @@ function App() {
           element={
             <LazyRoute>
               <ProposalDetailsPage />
+            </LazyRoute>
+          }
+        />
+
+        <Route
+          path="/client-sharing"
+          element={
+            <LazyRoute>
+              <ClientSharingPage />
             </LazyRoute>
           }
         />
@@ -562,13 +671,15 @@ function App() {
         />
       </Route>
 
+      {/* ============================== */}
       {/* NOT FOUND */}
+      {/* ============================== */}
 
       <Route
         path="*"
         element={
           <Navigate
-            to="/login"
+            to="/"
             replace
           />
         }

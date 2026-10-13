@@ -8,13 +8,14 @@ import {
 } from "./authContext";
 
 // ==============================
-// PROTECTED ROUTE
+// PROTECTED ADMIN ROUTE
 // ==============================
 
 export const ProtectedRoute = ({
   children,
 }) => {
   const {
+    user,
     isAuthenticated,
     isAuthLoading,
   } = useAuth();
@@ -36,7 +37,13 @@ export const ProtectedRoute = ({
     );
   }
 
-  if (!isAuthenticated) {
+  const isAdmin =
+    user?.role === "admin";
+
+  if (
+    !isAuthenticated ||
+    !isAdmin
+  ) {
     return (
       <Navigate
         to="/login"
@@ -60,6 +67,7 @@ export const PublicOnlyRoute = ({
   children,
 }) => {
   const {
+    user,
     isAuthenticated,
     isAuthLoading,
   } = useAuth();
@@ -78,7 +86,13 @@ export const PublicOnlyRoute = ({
     );
   }
 
-  if (isAuthenticated) {
+  const isAdmin =
+    user?.role === "admin";
+
+  if (
+    isAuthenticated &&
+    isAdmin
+  ) {
     return (
       <Navigate
         to="/dashboard"

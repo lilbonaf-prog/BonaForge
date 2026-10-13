@@ -13,7 +13,8 @@ const protect = async (req, res, next) => {
       authorizationHeader &&
       authorizationHeader.startsWith("Bearer ")
     ) {
-      token = authorizationHeader.split(" ")[1];
+      token =
+        authorizationHeader.split(" ")[1];
     }
 
     if (!token) {
@@ -88,7 +89,20 @@ const protect = async (req, res, next) => {
       }
     }
 
-    // Make the authenticated user available
+    // ==============================
+    // ADMIN-ONLY ACCESS
+    // ==============================
+
+    if (user.role !== "admin") {
+      const error = new Error(
+        "Administrator access required"
+      );
+
+      error.statusCode = 403;
+      throw error;
+    }
+
+    // Make the authenticated admin available
     // to the next controller.
     req.user = user;
 

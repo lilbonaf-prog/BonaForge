@@ -118,6 +118,54 @@ export const reopenInvoice =
     return response.data;
   };
 
+// ==============================
+// SECURE CLIENT SHARING
+// ==============================
+
+export const createInvoiceShareLink =
+  async ({
+    invoiceId,
+    expiresInDays = 30,
+  }) => {
+    const response =
+      await api.post(
+        `/invoices/${invoiceId}/share`,
+        {
+          expiresInDays,
+        }
+      );
+
+    return response.data;
+  };
+
+export const revokeInvoiceShareLink =
+  async (
+    invoiceId
+  ) => {
+    const response =
+      await api.delete(
+        `/invoices/${invoiceId}/share`
+      );
+
+    return response.data;
+  };
+
+// ==============================
+// PUBLIC READ-ONLY INVOICE
+// ==============================
+
+export const getPublicInvoiceByToken =
+  async (
+    token
+  ) => {
+    const response =
+      await api.get(
+        `/share/invoice/${token}`
+      );
+
+    return response.data;
+  };
+
 export const deleteInvoice =
   async (invoiceId) => {
     const response =

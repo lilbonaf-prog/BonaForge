@@ -47,12 +47,22 @@ export const AuthProvider = ({
       try {
         return await getCurrentUser();
       } catch (error) {
+        const status =
+          error?.response?.status;
+
         if (
-          error?.response?.status ===
-          401
+          status === 401 ||
+          status === 403
         ) {
           removeAuthToken();
           setToken(null);
+
+          queryClient.removeQueries({
+            queryKey: [
+              "auth",
+              "me",
+            ],
+          });
         }
 
         throw error;

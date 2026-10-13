@@ -19,6 +19,13 @@ const {
 );
 
 const {
+  createQuotationShareLink,
+  revokeQuotationShareLink,
+} = require(
+  "../controllers/quotationShareController"
+);
+
+const {
   protect,
 } = require(
   "../middleware/authMiddleware"
@@ -88,6 +95,21 @@ router.post(
 router.post(
   "/:quotationId/reopen",
   reopenQuotation
+);
+
+// ==============================
+// CLIENT SHARE LINK
+// ADMIN ONLY
+// ==============================
+
+router.post(
+  "/:quotationId/share",
+  createQuotationShareLink
+);
+
+router.delete(
+  "/:quotationId/share",
+  revokeQuotationShareLink
 );
 
 // ==============================
