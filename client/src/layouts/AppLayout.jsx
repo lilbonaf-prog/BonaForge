@@ -187,35 +187,6 @@ function SidebarContent({
             const Icon =
               item.icon;
 
-            if (
-              item.comingSoon
-            ) {
-              return (
-                <button
-                  key={
-                    item.label
-                  }
-                  type="button"
-                  disabled
-                  className="group flex h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm text-[var(--text-muted)] opacity-55"
-                >
-                  <Icon
-                    size={17}
-                  />
-
-                  <span className="flex-1">
-                    {
-                      item.label
-                    }
-                  </span>
-
-                  <span className="rounded-md border border-[var(--border-primary)] bg-white/[0.025] px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.08em]">
-                    Soon
-                  </span>
-                </button>
-              );
-            }
-
             return (
               <NavLink
                 key={

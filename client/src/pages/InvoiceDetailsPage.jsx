@@ -13,6 +13,7 @@ import {
   Loader2,
   Pencil,
   Plus,
+  Printer,
   ReceiptText,
   RotateCcw,
   Save,
@@ -35,6 +36,7 @@ import useCancelInvoice from "../features/invoices/useCancelInvoice";
 import useReopenInvoice from "../features/invoices/useReopenInvoice";
 import useDeleteInvoice from "../features/invoices/useDeleteInvoice";
 import InvoicePaymentWorkspace from "../features/payments/InvoicePaymentWorkspace";
+import printInvoice from "../utils/invoicePrint";
 
 const statusClasses = {
   draft:
@@ -725,6 +727,27 @@ const InvoiceDetailsPage = () => {
       }
     };
 
+  const handlePrintInvoice =
+    () => {
+      if (!invoice) {
+        return;
+      }
+
+      setNotice("");
+      setLocalError("");
+
+      const result =
+        printInvoice(
+          invoice
+        );
+
+      if (!result.success) {
+        setLocalError(
+          result.message
+        );
+      }
+    };
+
   const handleDeleteInvoice =
     async () => {
       if (
@@ -900,6 +923,18 @@ const InvoiceDetailsPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            {!isEditing ? (
+              <ActionButton
+                icon={Printer}
+                onClick={
+                  handlePrintInvoice
+                }
+                disabled={busy}
+              >
+                Print / PDF
+              </ActionButton>
+            ) : null}
+
             {canEdit &&
             !isEditing ? (
               <ActionButton

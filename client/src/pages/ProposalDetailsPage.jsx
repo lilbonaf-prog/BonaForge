@@ -14,6 +14,7 @@ import {
   Loader2,
   Pencil,
   Plus,
+  Printer,
   RefreshCw,
   RotateCcw,
   Save,
@@ -36,6 +37,7 @@ import useRejectProposal from "../features/proposals/useRejectProposal";
 import useExpireProposal from "../features/proposals/useExpireProposal";
 import useReopenProposal from "../features/proposals/useReopenProposal";
 import useDeleteProposal from "../features/proposals/useDeleteProposal";
+import printProposal from "../utils/proposalPrint";
 
 const statusConfig = {
   draft: {
@@ -1025,6 +1027,26 @@ const ProposalDetailsPage =
         }
       };
 
+    const handlePrintProposal =
+      () => {
+        if (!proposal) {
+          return;
+        }
+
+        clearMessages();
+
+        const result =
+          printProposal(
+            proposal
+          );
+
+        if (!result.success) {
+          setLocalError(
+            result.message
+          );
+        }
+      };
+
     const handleDelete =
       async () => {
         if (!proposal?._id) {
@@ -1238,6 +1260,25 @@ const ProposalDetailsPage =
               </div>
 
               <div className="flex flex-wrap gap-2">
+                {!isEditing ? (
+                  <button
+                    type="button"
+                    onClick={
+                      handlePrintProposal
+                    }
+                    disabled={
+                      isBusy
+                    }
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:bg-white/10 disabled:opacity-50"
+                  >
+                    <Printer
+                      size={16}
+                    />
+
+                    Print / PDF
+                  </button>
+                ) : null}
+
                 {!isEditing &&
                 canEdit ? (
                   <button

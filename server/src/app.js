@@ -69,11 +69,69 @@ app.use(helmet());
 // CORS
 // ==============================
 
+const configuredOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  ...(
+    process.env.CORS_ORIGINS ||
+    ""
+  ).split(","),
+]
+  .map((origin) =>
+    origin?.trim()
+  )
+  .filter(Boolean);
+
+const allowedOrigins =
+  configuredOrigins.length > 0
+    ? configuredOrigins
+    : [
+        "http://localhost:5173",
+      ];
+
+const corsOptions = {
+  origin: (
+    origin,
+    callback
+  ) => {
+    // Allow requests that do not send an
+    // Origin header, such as Postman,
+    // backend services and local tests.
+    if (!origin) {
+      return callback(
+        null,
+        true
+      );
+    }
+
+    if (
+      allowedOrigins.includes(
+        origin
+      )
+    ) {
+      return callback(
+        null,
+        true
+      );
+    }
+
+    const error =
+      new Error(
+        "Origin not allowed by CORS"
+      );
+
+    error.statusCode = 403;
+
+    return callback(
+      error
+    );
+  },
+
+  credentials: true,
+};
+
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
+  cors(corsOptions)
 );
 
 // ==============================

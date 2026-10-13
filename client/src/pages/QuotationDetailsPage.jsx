@@ -13,6 +13,7 @@ import {
   Loader2,
   Pencil,
   Plus,
+  Printer,
   RotateCcw,
   Save,
   Send,
@@ -34,6 +35,7 @@ import useRejectQuotation from "../features/quotations/useRejectQuotation";
 import useExpireQuotation from "../features/quotations/useExpireQuotation";
 import useReopenQuotation from "../features/quotations/useReopenQuotation";
 import useDeleteQuotation from "../features/quotations/useDeleteQuotation";
+import printQuotation from "../utils/quotationPrint";
 
 const statusClasses = {
   draft:
@@ -656,6 +658,27 @@ const QuotationDetailsPage =
         }
       };
 
+    const handlePrintQuotation =
+      () => {
+        if (!quotation) {
+          return;
+        }
+
+        setNotice("");
+        setLocalError("");
+
+        const result =
+          printQuotation(
+            quotation
+          );
+
+        if (!result.success) {
+          setLocalError(
+            result.message
+          );
+        }
+      };
+
     const handleDelete =
       async () => {
         if (
@@ -817,6 +840,18 @@ const QuotationDetailsPage =
             </div>
 
             <div className="flex flex-wrap gap-2">
+              {!isEditing ? (
+                <ActionButton
+                  icon={Printer}
+                  onClick={
+                    handlePrintQuotation
+                  }
+                  disabled={busy}
+                >
+                  Print / PDF
+                </ActionButton>
+              ) : null}
+
               {canEdit &&
               !isEditing ? (
                 <ActionButton

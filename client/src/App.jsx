@@ -1,4 +1,9 @@
 import {
+  lazy,
+  Suspense,
+} from "react";
+
+import {
   Navigate,
   Route,
   Routes,
@@ -12,47 +17,246 @@ import {
 import AuthLayout from "./layouts/AuthLayout";
 import AppLayout from "./layouts/AppLayout";
 
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
+const LoginPage = lazy(
+  () =>
+    import(
+      "./pages/LoginPage"
+    )
+);
 
-import DashboardPage from "./pages/DashboardPage";
-import AccountPage from "./pages/AccountPage";
+const RegisterPage = lazy(
+  () =>
+    import(
+      "./pages/RegisterPage"
+    )
+);
 
-import BusinessesPage from "./pages/BusinessesPage";
-import BusinessDetailsPage from "./pages/BusinessDetailsPage";
+const ForgotPasswordPage =
+  lazy(
+    () =>
+      import(
+        "./pages/ForgotPasswordPage"
+      )
+  );
 
-import LeadsPage from "./pages/LeadsPage";
-import LeadDetailsPage from "./pages/LeadDetailsPage";
-import FollowUpsPage from "./pages/FollowUpsPage";
+const ResetPasswordPage =
+  lazy(
+    () =>
+      import(
+        "./pages/ResetPasswordPage"
+      )
+  );
 
-import ProposalsPage from "./pages/ProposalsPage";
-import ProposalDetailsPage from "./pages/ProposalDetailsPage";
+const VerifyEmailPage =
+  lazy(
+    () =>
+      import(
+        "./pages/VerifyEmailPage"
+      )
+  );
 
-import QuotationsPage from "./pages/QuotationsPage";
-import QuotationDetailsPage from "./pages/QuotationDetailsPage";
+const DashboardPage = lazy(
+  () =>
+    import(
+      "./pages/DashboardPage"
+    )
+);
 
-import ProjectsPage from "./pages/ProjectsPage";
-import ProjectDetailsPage from "./pages/ProjectDetailsPage";
+const AccountPage = lazy(
+  () =>
+    import(
+      "./pages/AccountPage"
+    )
+);
 
-import InvoicesPage from "./pages/InvoicesPage";
-import InvoiceDetailsPage from "./pages/InvoiceDetailsPage";
+const BusinessesPage = lazy(
+  () =>
+    import(
+      "./pages/BusinessesPage"
+    )
+);
 
-import PaymentsPage from "./pages/PaymentsPage";
-import PaymentDetailsPage from "./pages/PaymentDetailsPage";
+const BusinessDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/BusinessDetailsPage"
+      )
+  );
 
-import AnalyticsPage from "./pages/AnalyticsPage";
+const LeadsPage = lazy(
+  () =>
+    import(
+      "./pages/LeadsPage"
+    )
+);
 
-import ResearchPage from "./pages/ResearchPage";
-import ResearchDetailsPage from "./pages/ResearchDetailsPage";
+const LeadDetailsPage = lazy(
+  () =>
+    import(
+      "./pages/LeadDetailsPage"
+    )
+);
 
-import WebsiteAuditPage from "./pages/WebsiteAuditPage";
-import WebsiteAuditDetailsPage from "./pages/WebsiteAuditDetailsPage";
+const FollowUpsPage = lazy(
+  () =>
+    import(
+      "./pages/FollowUpsPage"
+    )
+);
 
-import OpportunityAnalysisPage from "./pages/OpportunityAnalysisPage";
-import OpportunityAnalysisDetailsPage from "./pages/OpportunityAnalysisDetailsPage";
+const ProposalsPage = lazy(
+  () =>
+    import(
+      "./pages/ProposalsPage"
+    )
+);
+
+const ProposalDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/ProposalDetailsPage"
+      )
+  );
+
+const QuotationsPage = lazy(
+  () =>
+    import(
+      "./pages/QuotationsPage"
+    )
+);
+
+const QuotationDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/QuotationDetailsPage"
+      )
+  );
+
+const ProjectsPage = lazy(
+  () =>
+    import(
+      "./pages/ProjectsPage"
+    )
+);
+
+const ProjectDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/ProjectDetailsPage"
+      )
+  );
+
+const InvoicesPage = lazy(
+  () =>
+    import(
+      "./pages/InvoicesPage"
+    )
+);
+
+const InvoiceDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/InvoiceDetailsPage"
+      )
+  );
+
+const PaymentsPage = lazy(
+  () =>
+    import(
+      "./pages/PaymentsPage"
+    )
+);
+
+const PaymentDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/PaymentDetailsPage"
+      )
+  );
+
+const AnalyticsPage = lazy(
+  () =>
+    import(
+      "./pages/AnalyticsPage"
+    )
+);
+
+const ResearchPage = lazy(
+  () =>
+    import(
+      "./pages/ResearchPage"
+    )
+);
+
+const ResearchDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/ResearchDetailsPage"
+      )
+  );
+
+const WebsiteAuditPage =
+  lazy(
+    () =>
+      import(
+        "./pages/WebsiteAuditPage"
+      )
+  );
+
+const WebsiteAuditDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/WebsiteAuditDetailsPage"
+      )
+  );
+
+const OpportunityAnalysisPage =
+  lazy(
+    () =>
+      import(
+        "./pages/OpportunityAnalysisPage"
+      )
+  );
+
+const OpportunityAnalysisDetailsPage =
+  lazy(
+    () =>
+      import(
+        "./pages/OpportunityAnalysisDetailsPage"
+      )
+  );
+
+const RouteLoader = () => (
+  <div className="flex min-h-[420px] w-full items-center justify-center">
+    <div className="text-center">
+      <div className="mx-auto h-9 w-9 animate-spin rounded-full border-2 border-white/10 border-t-indigo-300" />
+
+      <p className="mt-4 text-sm font-medium text-white/35">
+        Loading workspace...
+      </p>
+    </div>
+  </div>
+);
+
+const LazyRoute = ({
+  children,
+}) => (
+  <Suspense
+    fallback={
+      <RouteLoader />
+    }
+  >
+    {children}
+  </Suspense>
+);
 
 function App() {
   return (
@@ -81,21 +285,27 @@ function App() {
         <Route
           path="/login"
           element={
-            <LoginPage />
+            <LazyRoute>
+              <LoginPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/register"
           element={
-            <RegisterPage />
+            <LazyRoute>
+              <RegisterPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/forgot-password"
           element={
-            <ForgotPasswordPage />
+            <LazyRoute>
+              <ForgotPasswordPage />
+            </LazyRoute>
           }
         />
       </Route>
@@ -110,14 +320,18 @@ function App() {
         <Route
           path="/reset-password/:token"
           element={
-            <ResetPasswordPage />
+            <LazyRoute>
+              <ResetPasswordPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/verify-email/:token"
           element={
-            <VerifyEmailPage />
+            <LazyRoute>
+              <VerifyEmailPage />
+            </LazyRoute>
           }
         />
       </Route>
@@ -134,168 +348,216 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <DashboardPage />
+            <LazyRoute>
+              <DashboardPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/businesses"
           element={
-            <BusinessesPage />
+            <LazyRoute>
+              <BusinessesPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/businesses/:businessId"
           element={
-            <BusinessDetailsPage />
+            <LazyRoute>
+              <BusinessDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/leads"
           element={
-            <LeadsPage />
+            <LazyRoute>
+              <LeadsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/leads/:leadId"
           element={
-            <LeadDetailsPage />
+            <LazyRoute>
+              <LeadDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/follow-ups"
           element={
-            <FollowUpsPage />
+            <LazyRoute>
+              <FollowUpsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/proposals"
           element={
-            <ProposalsPage />
+            <LazyRoute>
+              <ProposalsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/proposals/:proposalId"
           element={
-            <ProposalDetailsPage />
+            <LazyRoute>
+              <ProposalDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/quotations"
           element={
-            <QuotationsPage />
+            <LazyRoute>
+              <QuotationsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/quotations/:quotationId"
           element={
-            <QuotationDetailsPage />
+            <LazyRoute>
+              <QuotationDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/projects"
           element={
-            <ProjectsPage />
+            <LazyRoute>
+              <ProjectsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/projects/:projectId"
           element={
-            <ProjectDetailsPage />
+            <LazyRoute>
+              <ProjectDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/invoices"
           element={
-            <InvoicesPage />
+            <LazyRoute>
+              <InvoicesPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/invoices/:invoiceId"
           element={
-            <InvoiceDetailsPage />
+            <LazyRoute>
+              <InvoiceDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/payments"
           element={
-            <PaymentsPage />
+            <LazyRoute>
+              <PaymentsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/payments/:paymentId"
           element={
-            <PaymentDetailsPage />
+            <LazyRoute>
+              <PaymentDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/analytics"
           element={
-            <AnalyticsPage />
+            <LazyRoute>
+              <AnalyticsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/research"
           element={
-            <ResearchPage />
+            <LazyRoute>
+              <ResearchPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/research/:businessId"
           element={
-            <ResearchDetailsPage />
+            <LazyRoute>
+              <ResearchDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/website-audits"
           element={
-            <WebsiteAuditPage />
+            <LazyRoute>
+              <WebsiteAuditPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/website-audits/:businessId"
           element={
-            <WebsiteAuditDetailsPage />
+            <LazyRoute>
+              <WebsiteAuditDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/opportunities"
           element={
-            <OpportunityAnalysisPage />
+            <LazyRoute>
+              <OpportunityAnalysisPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/opportunities/:businessId"
           element={
-            <OpportunityAnalysisDetailsPage />
+            <LazyRoute>
+              <OpportunityAnalysisDetailsPage />
+            </LazyRoute>
           }
         />
 
         <Route
           path="/account"
           element={
-            <AccountPage />
+            <LazyRoute>
+              <AccountPage />
+            </LazyRoute>
           }
         />
       </Route>
